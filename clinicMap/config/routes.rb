@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
-  get '/geolocate/:name/:full_address' => 'welcome#getGeoLocation'
+  get '/getGeoLocations' => 'welcome#getGeoLocations'
   get '/clinics/:id/data' => 'welcome#getClinic'
   get '/clinicsLocations' => 'welcome#allClinics'
   put '/saveLatLng/:id/:lat/:lng' => 'welcome#saveLatLng'

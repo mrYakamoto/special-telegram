@@ -8,13 +8,28 @@ class WelcomeController < ApplicationController
     # @cpcs = Clinic.all
   end
 
-  def getGeoLocation
-    p "======INSIDE GET GEO LOCATION======="
-    name = params[:name]
-    full_address = params[:full_address].split(' ')
-    full_address = full_address.join('+')
-    response = RestClient.get "https://maps.googleapis.com/maps/api/geocode/json?address=#{full_address}&key=AIzaSyDBsnO1kJI8VpBFeRTSQjVXykPPpWGtJAY"
-    respond_with(response)
+  def getGeoLocations
+    "======INSIDE GET GEO LOCATION======="
+    @clinics = Clinic.where(lat:nil)
+
+    @clinics.each do |clinic_obj|
+      if clinic_obj.lat
+      else
+
+        full_address = clinic_obj.full_address.gsub(/[,.-]/, '')
+        full_address = full_address.split(/[\W]/).join('+')
+        response = RestClient.get "https://maps.googleapis.com/maps/api/geocode/json?address=#{full_address}&key=AIzaSyDBsnO1kJI8VpBFeRTSQjVXykPPpWGtJAY"
+        response = JSON.parse(response)
+        clinic = clinic_obj
+        if (response["status"] != "ZERO_RESULTS")
+          clinic.lat = response["results"][0]["geometry"]["location"]["lat"]
+          clinic.lng = response["results"][0]["geometry"]["location"]["lng"]
+          clinic.save
+        else
+        end
+      end
+    end
+    redirect '/'
   end
 
   def getClinic
@@ -24,12 +39,13 @@ class WelcomeController < ApplicationController
     clinic_hash = {name:"#{clinic.name}", full_address:"#{clinic.full_address}"}
     p clinic_hash
     return clinic.to_json
-
   end
 
   def allClinics
     p "======ALL-CLINICS-ROUTE======"
-  @clinics = Clinic.all
+  # @clinics = Clinic.all
+  @clinic = Clinic.where(state:WY)
+
   # @clinics.to_json
   respond_with(@clinics)
 
