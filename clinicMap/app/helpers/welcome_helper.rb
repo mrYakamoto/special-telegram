@@ -13,12 +13,18 @@ module WelcomeHelper
   end
 
   def save_clinic_to_db_with_no_Lat_Lng(clinic)
-    name = clinic["name"]
-    full_address = clinic["full_address"]
-    street_address = clinic["address"]
-    city = clinic["city"]
-    state = clinic["state"]
-    zip = clinic["zip"]
+    name = clinic["name"].gsub(/[.]/,'')
+    name = name.gsub(/[-]/,' ')
+    full_address = clinic["full_address"].gsub(/[.]/,'')
+    full_address = full_address.gsub(/[-]/,' ')
+    street_address = clinic["address"].gsub(/[.]/,'')
+    street_address = street_address.gsub(/[-]/,' ')
+
+    city = clinic["city"].gsub(/[.]/,'')
+    city = city.gsub(/[-]/,' ')
+    state = clinic["state"].gsub(/[.]/,'')
+    state = state.gsub(/[-]/,' ')
+    zip = clinic["zip"].gsub(/[.]/,'')
     clinic_object = Clinic.new(name: name, full_address: full_address, street_address: street_address, city: city, state: state, zip: zip)
     p clinic_object
     clinic_object.save!
