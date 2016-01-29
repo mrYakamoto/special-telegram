@@ -8,6 +8,7 @@ class WelcomeController < ApplicationController
     # @cpcs = Clinic.all
   end
 
+
   def getGeoLocations
     "======INSIDE GET GEO LOCATION======="
     @clinics = Clinic.where(lat:nil)
@@ -30,6 +31,7 @@ class WelcomeController < ApplicationController
       end
     end
     redirect '/'
+
   end
 
   def getClinic
@@ -43,8 +45,7 @@ class WelcomeController < ApplicationController
 
   def allClinics
     p "======ALL-CLINICS-ROUTE======"
-  # @clinics = Clinic.all
-  @clinic = Clinic.where(state:WY)
+    @clinics = Clinic.all
 
   # @clinics.to_json
   respond_with(@clinics)
@@ -52,6 +53,7 @@ class WelcomeController < ApplicationController
 end
 
 def saveLatLng
+  p "=========saveLatLng-ROUTE=========="
   clinic = Clinic.find(params[:id])
   p params
   clinic.lat = params[:lat].to_f.round(8)

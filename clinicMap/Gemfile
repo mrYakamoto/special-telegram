@@ -37,6 +37,8 @@ gem 'gmaps4rails'
 gem 'responders'
 gem 'rest-client'
 
+gem 'geokit-rails'
+
 
 # Use Unicorn as the app server
 # gem 'unicorn'
