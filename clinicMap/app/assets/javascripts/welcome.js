@@ -1,6 +1,6 @@
 $(document).ready(function() {
   console.log("WHAT UP JS!?!!??!");
-  getAllClinicsInfo();
+  // getAllClinicsInfo();
 
 });
 
@@ -86,7 +86,9 @@ $(document).ready(function() {
       console.log(clinicCount);
 
       for (var i=1; i < clinicCount; i++){
+
         // for (var i=1; i < 2; i++){
+
           if ((arrayClinicObjects[i].lat)&&(arrayClinicObjects[i].lng)){
             console.log("INSIDE IF");
 
@@ -122,9 +124,11 @@ $(document).ready(function() {
     });
   }
 
-  function latLngData(clinicObj){
-    $.ajax({
-      type: 'GET',
+  // function latLngData(clinicObj){
+  //   $.ajax({
+  //     type: 'GET',
+  //     url: "/geolocate/"+clinicObj.id+"/"+clinicObj.full_address,
+
 
       url: "/geolocate/"+clinicObj.name+"/"+clinicObj.full_address
     })
@@ -139,6 +143,7 @@ $(document).ready(function() {
       alert(error);
     });
   }
+
 
   function saveLatLngData(clinicObj){
     // clinicInfo = {};

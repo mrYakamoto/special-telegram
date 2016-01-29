@@ -38,6 +38,7 @@ def state_page_parser(state_page)
   state_page_clinics_div_html = state_page.css( 'div.panes div p')
   state_name = state_page.css( 'div.panes div h3.state-name' ).text
   state_name = state_name.sub(/(\\t|\\r|\\n)/, "")
+  state = state_names_and_abbrev_in_hash[state_name]
 
   state_page_clinics_div_html.each do |p_tag|
     p state_name
@@ -57,10 +58,7 @@ def state_page_parser(state_page)
   end
 
   state_page_clinics_div_html.each do |p_tag|
-    state = state_page.css( 'div.panes div h3.state-name' ).text
-    state = state_names_and_abbrev_in_hash[state]
-
-
+    # state = state_page.css( 'div.panes div h3.state-name' ).text
 
     if p_tag.children.length == 3
 
@@ -71,52 +69,67 @@ def state_page_parser(state_page)
       zip = remove_whitespace(p_tag.children[2]).match(/\d{5}/)
 
       CSV.open('parsed_results_three_rows.csv', "ab:UTF-8") do |csv|
-
-
         csv << [name, full_address, address, city, state, zip]
-
       end
-  end
 
-  case p_tag.children.length
-  when 1
-    row1 = remove_whitespace(p_tag.children[0])
-    CSV.open('parsed_results_one_rows.csv', "ab:UTF-8") do |csv|
-      csv << [row1]
-    end
-  when 2
-    row1 = remove_whitespace(p_tag.children[0])
-    CSV.open('parsed_results_one_rows.csv', "ab:UTF-8") do |csv|
-      csv << [row1]
-    end
-  when 3
-    row1 = remove_whitespace(p_tag.children[0])
-    CSV.open('parsed_results_one_rows.csv', "ab:UTF-8") do |csv|
-      csv << [row1]
-    end
-  when 4
-    row1 = remove_whitespace(p_tag.children[0])
-    CSV.open('parsed_results_one_rows.csv', "ab:UTF-8") do |csv|
-      csv << [row1]
-    end
-  when 5
-    row1 = remove_whitespace(p_tag.children[0])
-    CSV.open('parsed_results_one_rows.csv', "ab:UTF-8") do |csv|
-      csv << [row1]
-    end
-  when 6
-    row1 = remove_whitespace(p_tag.children[0])
-    CSV.open('parsed_results_one_rows.csv', "ab:UTF-8") do |csv|
-      csv << [row1]
-    end
-  when 7
-    row1 = remove_whitespace(p_tag.children[0])
-    CSV.open('parsed_results_one_rows.csv', "ab:UTF-8") do |csv|
-      csv << [row1]
-    end
-  end
+    elsif p_tag.children.length == 1
+      first_row = remove_whitespace(p_tag.children[0])
+      CSV.open('parsed_results_one_row.csv', "ab:UTF-8") do |csv|
+        csv << [first_row]
+      end
 
-end
+    elsif p_tag.children.length == 2
+      first_row = remove_whitespace(p_tag.children[0])
+      second_row = remove_whitespace(p_tag.children[1])
+      CSV.open('parsed_results_two_rows.csv', "ab:UTF-8") do |csv|
+        csv << [first_row, second_row]
+      end
+
+    elsif p_tag.children.length == 4
+      first_row = remove_whitespace(p_tag.children[0])
+      second_row = remove_whitespace(p_tag.children[1])
+      third_row = remove_whitespace(p_tag.children[2])
+      fourth_row = remove_whitespace(p_tag.children[3])
+      CSV.open('parsed_results_four_rows.csv', "ab:UTF-8") do |csv|
+        csv << [first_row, second_row, third_row, fourth_row]
+      end
+
+    elsif p_tag.children.length == 5
+      first_row = remove_whitespace(p_tag.children[0])
+      second_row = remove_whitespace(p_tag.children[1])
+      third_row = remove_whitespace(p_tag.children[2])
+      fourth_row = remove_whitespace(p_tag.children[3])
+      fifth_row = remove_whitespace(p_tag.children[4])
+      CSV.open('parsed_results_five_rows.csv', "ab:UTF-8") do |csv|
+        csv << [first_row, second_row, third_row, fourth_row, fifth_row]
+      end
+
+    elsif p_tag.children.length == 6
+      first_row = remove_whitespace(p_tag.children[0])
+      second_row = remove_whitespace(p_tag.children[1])
+      third_row = remove_whitespace(p_tag.children[2])
+      fourth_row = remove_whitespace(p_tag.children[3])
+      fifth_row = remove_whitespace(p_tag.children[4])
+      sixth_row = remove_whitespace(p_tag.children[5])
+      CSV.open('parsed_results_six_rows.csv', "ab:UTF-8") do |csv|
+        csv << [first_row, second_row, third_row, fourth_row, fifth_row, sixth_row]
+      end
+
+    elsif p_tag.children.length == 7
+      first_row = remove_whitespace(p_tag.children[0])
+      second_row = remove_whitespace(p_tag.children[1])
+      third_row = remove_whitespace(p_tag.children[2])
+      fourth_row = remove_whitespace(p_tag.children[3])
+      fifth_row = remove_whitespace(p_tag.children[4])
+      sixth_row = remove_whitespace(p_tag.children[5])
+      seventh_row = remove_whitespace(p_tag.children[6])
+      CSV.open('parsed_results_seven_rows.csv', "ab:UTF-8") do |csv|
+        csv << [first_row, second_row, third_row, fourth_row, fifth_row, sixth_row, seventh_row]
+      end
+
+    end
+
+  end
 end
 
 

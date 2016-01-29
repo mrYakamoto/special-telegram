@@ -8,28 +8,30 @@ class WelcomeController < ApplicationController
     # @cpcs = Clinic.all
   end
 
-  def getGeoLocation
-    p "======INSIDE GET GEO LOCATION======="
-    name = params[:name]
-    full_address = params[:full_address].split(' ')
-    full_address = full_address.join('+')
-    response = RestClient.get "https://maps.googleapis.com/maps/api/geocode/json?address=#{full_address}&key=AIzaSyDBsnO1kJI8VpBFeRTSQjVXykPPpWGtJAY"
 
-    response = JSON.parse(response)
-    lat = response["results"][0]["geometry"]["location"]["lat"]
-    lng = response["results"][0]["geometry"]["location"]["lng"]
+  def getGeoLocations
+    "======INSIDE GET GEO LOCATION======="
+    @clinics = Clinic.where(lat:nil)
 
-    clinic = Clinic.where(full_address:params[:full_address])[0]
+    @clinics.each do |clinic_obj|
+      if clinic_obj.lat
+      else
 
-    clinic.lat = lat
-    clinic.lng = lng
-    if clinic.save
-      return "SAVED"
-    else
-      return "FAILED TO SAVE"
+        full_address = clinic_obj.full_address.gsub(/[,.-]/, '')
+        full_address = full_address.split(/[\W]/).join('+')
+        response = RestClient.get "https://maps.googleapis.com/maps/api/geocode/json?address=#{full_address}&key=AIzaSyDBsnO1kJI8VpBFeRTSQjVXykPPpWGtJAY"
+        response = JSON.parse(response)
+        clinic = clinic_obj
+        if (response["status"] != "ZERO_RESULTS")
+          clinic.lat = response["results"][0]["geometry"]["location"]["lat"]
+          clinic.lng = response["results"][0]["geometry"]["location"]["lng"]
+          clinic.save
+        else
+        end
+      end
     end
-    respond_with(response)
-    # render :nothing => true
+    redirect '/'
+
   end
 
   def getClinic
@@ -39,12 +41,12 @@ class WelcomeController < ApplicationController
     clinic_hash = {name:"#{clinic.name}", full_address:"#{clinic.full_address}"}
     p clinic_hash
     return clinic.to_json
-
   end
 
   def allClinics
     p "======ALL-CLINICS-ROUTE======"
     @clinics = Clinic.all
+
   # @clinics.to_json
   respond_with(@clinics)
 
