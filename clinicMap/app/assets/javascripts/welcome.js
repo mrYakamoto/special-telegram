@@ -85,8 +85,8 @@ $(document).ready(function() {
       var clinicCount = arrayClinicObjects.length;
       console.log(clinicCount);
 
-      // for (var i=1; i < clinicCount; i++){
-        for (var i=1; i < 5; i++){
+      for (var i=1; i < clinicCount; i++){
+        // for (var i=1; i < 2; i++){
           if ((arrayClinicObjects[i].lat)&&(arrayClinicObjects[i].lng)){
             console.log("INSIDE IF");
 
@@ -126,15 +126,14 @@ $(document).ready(function() {
     $.ajax({
       type: 'GET',
 
-      url: "/geolocate/"+clinicObj.name+"/"+clinicObj.full_address,
+      url: "/geolocate/"+clinicObj.name+"/"+clinicObj.full_address
     })
     .done(function(response){
       console.log("latLngData RESPONSE");
     // console.log(response);
-    var parsedGeoResponse = jQuery.parseJSON(response);
-    clinicObj.lat = parsedGeoResponse.results[0].geometry.location.lat;
-    clinicObj.lng = parsedGeoResponse.results[0].geometry.location.lng;
-    saveLatLngData(clinicObj);
+    // clinicObj.lat = response.results[0].geometry.location.lat;
+    // clinicObj.lng = response.results[0].geometry.location.lng;
+    // saveLatLngData(clinicObj);
   })
     .fail(function(xhr,unknown,error){
       alert(error);
@@ -142,14 +141,14 @@ $(document).ready(function() {
   }
 
   function saveLatLngData(clinicObj){
-    clinicInfo = {};
-    clinicInfo.id = clinicObj.id;
-    clinicInfo.lat = clinicObj.lat;
-    clinicInfo.lng = clinicObj.lng;
+    // clinicInfo = {};
+    // clinicInfo.id = clinicObj.id;
+    // clinicInfo.lat = clinicObj.lat;
+    // clinicInfo.lng = clinicObj.lng;
     $.ajax({
       type: 'PUT',
 
-      url: "/saveLatLng/"+clinicInfo.id+"/"+clinicInfo.lat+"/"+clinicInfo.lng
+      url: "/saveLatLng/"+clinicObj.id+"/"+clinicObj.lat+"/"+clinicObj.lng
     })
     .done(function(response){
       console.log("saveLatLngData RESPONSE");
@@ -158,6 +157,7 @@ $(document).ready(function() {
     })
     .fail(function(xhr,unknown,error){
       alert(error);
+      console.log(error);
     });
 
   }
