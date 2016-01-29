@@ -4,7 +4,7 @@ require 'rest-client'
 class WelcomeController < ApplicationController
   respond_to :json
   def index
-    # import_csv_data
+    import_csv_data
     # @cpcs = Clinic.all
   end
 
